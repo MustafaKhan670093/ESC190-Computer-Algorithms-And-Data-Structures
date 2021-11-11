@@ -1,0 +1,248 @@
+ESC190 DEFERRED EXAM, May 4, 2021
+====================================
+
+You have 2.5 hours to write the exam, and 30 minutes to submit it. You may continue writing the exam during the 30-minute
+submission window, but it is your responsibility to make sure that the exam is submitted on Gradescope on time.
+
+A penalty of 5 points (out of 95 possible points) will be subtracted for every minute of lateness.
+
+You may submit late with no penalty if you were approved by Accessbility Services.
+
+Aids allowed: you may consult the course textbooks, and course website and the ESC180 course website 
+              (http://www.cs.toronto.edu/~guerzhoy/180f20/). You may not consult other internet resources, books, or your notes.
+              You may not communicate with anyone about the exam apart from the course instructor on Piazza.
+
+You will need to use the files posted here:
+http://www.cs.toronto.edu/~guerzhoy/190/exam987984/
+
+
+Problem 1 -- 20 pts (15 pts autograded)
+=======================================
+Write a function that takes in two strings s1 and s2, and removes all instances of the string s2
+from the string s1.
+
+For example, if s1 is "aBCdeBCA" and s2 is "BC", the function would change s1 to "adeA". You 
+can assume that all the characters in s2 are different from each other.
+
+The function siganture is
+void remove_str(char *s1, char *s2);
+
+
+Sample run:
+char s1[] = "aBCdeBCA";
+char s2[] = "BC";
+
+remove_str(s1, s2); //s1 is "adeA"
+ 
+For the problem, you may include only stdlib.h and stdio.h.
+
+Submit the file Q1.c, which we must be able to compile using
+
+gcc -Wall Q1.c Q1_main.c
+
+(together with the given Q1.h)
+
+Problem 2 -- 20 pts (12 pts autograded)
+=========================================
+
+Write a function that takes in a linked list and returns 1 if, for every value n present
+in the list, the linked  list contains exactly n nodes with the value n. Otherwise, 
+the function should return 0.
+
+For example, the function should return 1 if the input list is
+
+1->3->3->4->3->4->4->4
+
+The function should return 0 if the input list is
+
+1->2->2->3
+
+The function must run in O(N+M) time, where N is the length of the linked list and M is the maximal value. 
+You can assume calls to malloc take O(1) time. You can assume that all values are positive integers.
+
+Solutions that take more than O(N+M) time will earn no more than 7 points.
+
+The function signature is
+int count_links(struct node *node);
+
+
+Sample run:
+
+struct node *n1 = (struct node *)malloc(sizeof(struct node));
+struct node *n2 = (struct node *)malloc(sizeof(struct node));
+struct node *n3 = (struct node *)malloc(sizeof(struct node));
+struct node *n4 = (struct node *)malloc(sizeof(struct node));
+
+
+n1->value = 1;
+n1->next = n2;
+n2->value = 2;
+n2->next = n3;
+n3->value = 2;
+n3->next = n4;
+n4->value = 3;
+n4->next = NULL;
+
+count_links(n1); // 0
+
+For the problem, you may include only stdlib.h and stdio.h.
+
+
+Submit the file Q2.c, which we must be able to compile using
+
+gcc -Wall Q2.c Q2_main.c
+
+(together with the given Q2.h)
+
+Problem 3 -- 20 pts (8 pts autograded)
+=======================================
+Read Problem 3 as well as Problem 4 before starting work on this question.
+You only need to implement insert in order to produce trees on which you can
+test your Problem 4 code. (Or you can make the tree "manually").
+
+
+In class, we defined a BST as follows. 
+
+class BST:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+    def insert(self, value):
+        '''
+        node.insert(5) is the same as BST.insert(node, 5)
+        We use this when recursively calling, e.g. self.left.insert
+        Assume that value is not in the tree.
+        '''
+        if value < self.value:
+            if self.left == None:
+                self.left = BST(value)
+            else:
+                self.left.insert(value)
+        else:
+            if self.right == None:
+                self.right = BST(value)
+            else:
+                self.right.insert(value)
+
+    def __repr__(self):
+        '''The string representation of a node.
+        Here, we convert the value of the node to a string and make that
+        the representation.
+        We can now use
+        a = BST(4)
+        print(a) # prints 4
+        '''
+        return str(self.value)
+
+We want to create a modified BST, where the size of the subtree rooted in the node n can
+be accessed using n.size. The size of a subtree is the number of nodes in it. Below
+is an illustration of a BST with the sizes in parentheses.
+
+              5 (4)
+             /   \
+            3 (2) 6 (1) 
+           /      
+          1 (1)
+
+         
+Write a new class, BST_w_sz, and complete the insert and delete_value functions below. 
+The functions should correctly update the size attribute of all the relevant nodes in the tree.
+
+class BST_w_sz:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+        self.size = 1
+    
+    def insert(self, value):
+        '''Assume that value is not in the tree.'''
+        pass
+
+    def __repr__(self):
+        '''The string representation of a node.
+        Here, we convert the value of the node to a string and make that
+        the representation.
+        We can now use
+        a = BST(4)
+        print(a) # prints 4
+        '''
+        return str(self.value)
+
+
+
+
+def delete_value(root, value):
+    '''Remove the value of value from a BST_w_sz tree rooted at node 
+    root. Return the root of the modified valid BST_w_sz tree.
+    The function must run in O(h) time, where h is the height of the tree'''
+
+
+n1 = BST_w_sz(5)
+n1.insert(6)
+n1.insert(3)
+n1.insert(1)
+n1.size      # 4 this is the autograded case
+n1.left.size # 2
+n1 = delete_value(n1, 5)
+n1.size      # 3 not checked by the current autograder
+
+Submit the file Q34.py with your implementation of BST_w_sz.
+
+Problem 4 - 15 pts (6 pts autograded)
+=====================================
+
+Write a function that takes in the root of a BST tree, which is of type BST_w_sz,
+and returns the median value in the tree.
+
+
+Sample run:
+
+n1 = BST_w_sz(10) # defined in Problem 3
+n1.insert(6)
+n1.insert(3)
+n1.insert(1)
+n1.insert(7)
+
+median_bst(n1) # 6
+
+You can assume that the number of nodes in the tree is odd.
+
+Add the function median_bst to your Q34.py file.
+
+The function must run in O(log(h)) time, where h is the height of the tree.
+
+
+Submit the file Q34.py with your implementation. If you have not completed Problem 3, 
+you can still submit a solution for Problem 4.
+
+
+Problem 5 -- 20 pts
+===================
+
+In ESC180, we argued that comparison-based sorts cannot run faster than O(n log n).
+http://www.cs.toronto.edu/~guerzhoy/180f20/lec/W11/MergeSortOpt.html
+
+Re-read the argument. 
+
+Now, *without using the proof from ESC180* (i.e., without arguing that one comparison 
+eliminates  approximately half of possible answers), prove that
+the worst-case runtime complexity of Heapsort is not O(n). (I.e., Heapsort is slower than O(n)).
+
+Your proof  should be self-contained: you  can look at the slides, but you should make all 
+the arguments that are necessary in order to draw the conclusion.
+
+You may use facts such as 5n^2+1 is O(n^2) without a formal proof.
+
+
+Submit the file Q5.txt with your proof.
+
+
+
+
+
+
+
+
